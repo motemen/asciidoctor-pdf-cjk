@@ -6,7 +6,9 @@ module Asciidoctor
   module Pdf
     module Cjk
       def self.break_words(string)
-        string.gsub(/(?<!^|\p{Space}|\p{Ps}|\p{Pi})[\p{Han}\p{Hiragana}\p{Katakana}\p{Ps}\p{Pi}]/) {|s| "#{::Prawn::Text::ZWSP}#{s}"}
+        string.split(/(<[^>]+>)/).each_slice(2).map do |s,t|
+          s.gsub(/(?<!^|\p{Space}|\p{Ps}|\p{Pi})[\p{Han}\p{Hiragana}\p{Katakana}\p{Ps}\p{Pi}]/) {|s| "#{::Prawn::Text::ZWSP}#{s}"} + (t || '')
+        end.join('')
       end
     end
   end
